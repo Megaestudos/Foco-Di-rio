@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Molde Diário — Clareza e Foco</title>
+  <meta name="color-scheme" content="light">
+  <style>
+    :root{
+      --bg: #0b1220;
+      --card: rgba(255,255,255,0.08);
+      --card2: rgba(255,255,255,0.06);
+      --text: #eaf0ff;
+      --muted: rgba(234,240,255,0.72);
+      --border: rgba(234,240,255,0.14);
+      --accent: #4f8cff;
+      --good: #2ee59d;
+      --bad: #ff6476;
+      --warn: #ffd166;
+      --shadow: 0 18px 60px rgba(0,0,0,0.35);
+      --radius: 18px;
+      --radius2: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(79,140,255,0.22), transparent 60%),
+        radial-gradient(900px 600px at 85% 15%, rgba(46,229,157,0.14), transparent 55%),
+        radial-gradient(900px 650px at 40% 90%, rgba(255,100,118,0.12), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to bottom, rgba(11,18,32,0.92), rgba(11,18,32,0.65));
+      border-bottom: 1px solid var(--border);
+    }
+
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 16px 28px;
+    }
+
+    .topbar{
+      display:flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 280px;
+    }
+
+    .logo{
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(79,140,255,0.95), rgba(46,229,157,0.75));
+      box-shadow: 0 10px 28px rgba(79,140,255,0.18);
+    }
+
+    h1{
+      font-size: 16px;
+      margin: 0;
+      letter-spacing: 0.2px;
+    }
+    .subtitle{
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .controls{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .field{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    label{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    input[type="date"], input[type="text"], select{
+      background: transparent;
+      color: var(--text);
+      border: none;
+      outline: none;
+      font-family: var(--sans);
+      font-size: 13px;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator{
+      filter: invert(1);
+      opacity: 0.9;
+    }
+
+    button{
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: transform .06s ease, background .15s ease, border-color .15s ease;
+    }
+    button:hover{
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(234,240,255,0.22);
+    }
+    button:active{ transform: translateY(1px); }
+
+    .btn-accent{
+      background: rgba(79,140,255,0.18);
+      border-color: rgba(79,140,255,0.45);
+    }
+    .btn-good{
+      background: rgba(46,229,157,0.14);
+      border-color: rgba(46,229,157,0.45);
+    }
+    .btn-bad{
+      background: rgba(255,100,118,0.14);
+      border-color: rgba(255,100,118,0.45);
+    }
+    .btn-warn{
+      background: rgba(255,209,102,0.14);
+      border-color: rgba(255,209,102,0.45);
+    }
+
+    main .wrap{
+      padding-top: 18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px){
+      .grid{ grid-template-columns: 1fr; }
+      .brand{ min-width: auto; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card .hd{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    }
+    .card .hd h2{
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+    .card .bd{
+      padding: 14px;
+    }
+
+    .section{
+      background: var(--card2);
+      border: 1px solid rgba(234,240,255,0.10);
+      border-radius: var(--radius2);
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .section:last-child{ margin-bottom: 0; }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .section-title h3{
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .rows{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .row{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+    }
+
+    .row input[type="text"]{
+      flex: 1;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(234,240,255,0.12);
+      background: rgba(0,0,0,0.18);
+    }
+
+    .row .del{
+      width: 38px;
+      padding: 10px 0;
+      text-align: center;
+      border-radius: 12px;
+    }
+
+    .helper{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 580px){
+      .split{ grid-template-columns: 1fr; }
+    }
+
+    .pill{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(0,0,0,0.20);
+    }
+
+    .kpis{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 12px 14px 14px;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.18);
+    }
+    .kpi{
+      display:flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(234,240,255,0.10);
+      background: rgba(255,255,255,0.05);
+      min-width: 160px;
+    }
+    .kpi .t{ font-size: 11px; color: var(--muted); }
+    .kpi .v{ font-size: 14px; font-weight: 650; letter-spacing: 0.2px; }
+
+    .side-list{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .dayitem{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(234,240,255,0.10);
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    .dayitem:hover{
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(234,240,255,0.18);
+    }
+    .dayitem .left{
+      display:flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .dayitem .d{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .dayitem .s{
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .badge{
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(234,240,255,0.14);
+      color: var(--muted);
+      background: rgba(0,0,0,0.20);
+      flex-shrink: 0;
+    }
+
+    .footer-actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.16);
+    }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.70);
+      border: 1px solid rgba(234,240,255,0.16);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .toast.show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    /* Print */
+    @media print{
+      header, .no-print{ display:none !important; }
+      body{ background:#fff; color:#111; }
+      .card{ box-shadow:none; border: 1px solid #ddd; background:#fff; }
+      .section{ background:#fff; border: 1px solid #eee; }
+      .row input[type="text"]{ background:#fff; color:#111; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Molde Diário — Clareza e Foco</h1>
+          <div class="subtitle">Um app simples para pré-preencher e revisar o dia, com histórico local.</div>
+        </div>
+      </div>
+
+      <div class="controls no-print">
+        <div class="field">
+          <label for="date">Data</label>
+          <input id="date" type="date" />
+        </div>
+        <div class="field">
+          <label for="weekday">Dia</label>
+          <input id="weekday" type="text" placeholder="(automático)" />
+        </div>
+
+        <button id="btnSave" class="btn-accent">Salvar</button>
+        <button id="btnPrint">Imprimir</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="grid">
+      <!-- Main editor -->
+      <section class="card">
+        <div class="hd">
+          <h2>Preenchimento do dia</h2>
+          <div class="pill" id="status">Não salvo</div>
+        </div>
+
+        <div class="bd">
+          <div class="section">
+            <div class="section-title">
+              <h3>1) PRIORIDADES DO DIA</h3>
+              <span class="pill" id="prioCount">0 itens</span>
+            </div>
+
+            <div class="split">
+              <div>
+                <div class="helper" style="margin-bottom:8px;">São prioridades hoje</div>
+                <div class="rows" id="prioritiesYes"></div>
+                <button class="no-print" data-add="prioritiesYes" style="margin-top:8px;">+ Adicionar</button>
+              </div>
+
+              <div>
+                <div class="helper" style="margin-bottom:8px;">Não são prioridades hoje</div>
+                <div class="rows" id="prioritiesNo"></div>
+                <button class="no-print" data-add="prioritiesNo" style="margin-top:8px;">+ Adicionar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">
+              <h3>2) IMPACTO NO MEU DIA</h3>
+              <span class="pill" id="impactCount">0 itens</span>
+            </div>
+
+            <div class="split">
+              <div>
+                <div class="helper" style="margin-bottom:8px;">Fazem bem hoje</div>
+                <div class="rows" id="good"></div>
+                <button class="no-print" data-add="good" style="margin-top:8px;">+ Adicionar</button>
+              </div>
+
+              <div>
+                <div class="helper" style="margin-bottom:8px;">Não fazem bem hoje</div>
+                <div class="rows" id="bad"></div>
+                <button class="no-print" data-add="bad" style="margin-top:8px;">+ Adicionar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">
+              <h3>3) FOCO E EXECUÇÃO</h3>
+              <span class="pill" id="focusCount">0/2</span>
+            </div>
+            <div class="rows" id="focus">
+              <!-- two fixed inputs -->
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">
+              <h3>4) FECHAMENTO DO DIA (à noite)</h3>
+              <span class="pill" id="closeCount">0/2</span>
+            </div>
+            <div class="rows" id="closing">
+              <!-- two fixed inputs -->
+            </div>
+          </div>
+
+          <div class="helper" style="margin-top:10px;">
+            Regra prática: “Isso é prioridade agora ou distração?” e “Isso me faz bem no curto e longo prazo?”
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="t">Último salvamento</div>
+            <div class="v" id="lastSaved">—</div>
+          </div>
+          <div class="kpi">
+            <div class="t">Dias registrados</div>
+            <div class="v" id="daysCount">0</div>
+          </div>
+          <div class="kpi">
+            <div class="t">Auto-save</div>
+            <div class="v" id="autosaveStatus">Ativo</div>
+          </div>
+        </div>
+
+        <div class="footer-actions no-print">
+          <button id="btnDuplicate" class="btn-good">Duplicar para amanhã</button>
+          <button id="btnClearDay" class="btn-bad">Limpar este dia</button>
+          <button id="btnExport" class="btn-warn">Exportar backup (JSON)</button>
+          <button id="btnImport">Importar backup</button>
+          <input id="fileImport" type="file" accept="application/json" style="display:none;" />
+        </div>
+      </section>
+
+      <!-- Sidebar -->
+      <aside class="card">
+        <div class="hd">
+          <h2>Histórico</h2>
+          <div class="pill">Local</div>
+        </div>
+        <div class="bd">
+          <div class="helper" style="margin-bottom:10px;">
+            Toque em um dia para abrir. O histórico fica salvo apenas neste navegador/dispositivo.
+          </div>
+
+          <div class="field no-print" style="width:100%; justify-content: space-between;">
+            <label for="search">Buscar</label>
+            <input id="search" type="text" placeholder="ex.: 2026-01-04 ou palavra" style="width: 70%;" />
+          </div>
+
+          <div class="side-list" id="historyList" style="margin-top:10px;"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  (function(){
+    const LS_KEY = "molde_diario_v1";
+
+    // ---- Helpers
+    const $ = (sel) => document.querySelector(sel);
+    const el = (tag, attrs={}) => Object.assign(document.createElement(tag), attrs);
+    const pad2 = (n) => String(n).padStart(2,"0");
+
+    function toISODate(d){
+      return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+    }
+
+    function weekdayPT(d){
+      const days = ["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"];
+      return days[d.getDay()];
+    }
+
+    function nowTime(){
+      const d = new Date();
+      return `${toISODate(d)} ${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
+    }
+
+    function toast(msg){
+      const t = $("#toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(()=>t.classList.remove("show"), 1600);
+    }
+
+    function safeParse(json, fallback){
+      try { return JSON.parse(json); } catch { return fallback; }
+    }
+
+    function loadAll(){
+      return safeParse(localStorage.getItem(LS_KEY) || "{}", {});
+    }
+
+    function saveAll(obj){
+      localStorage.setItem(LS_KEY, JSON.stringify(obj));
+    }
+
+    // ---- Data shape
+    function blankDay(dateISO, weekday){
+      return {
+        date: dateISO,
+        weekday: weekday || "",
+        prioritiesYes: ["","","",""],
+        prioritiesNo: ["","",""],
+        good: ["","",""],
+        bad: ["","",""],
+        focusEssential: "",
+        focusLater: "",
+        closingGood: "",
+        closingImprove: "",
+        updatedAt: null
+      };
+    }
+
+    // ---- UI row builders
+    function makeRow(containerId, idx, value, placeholder){
+      const row = el("div", { className: "row" });
+      const input = el("input", { type: "text", value: value || "", placeholder: placeholder || "" });
+      input.addEventListener("input", markDirtyAndAutosave);
+
+      const del = el("button", { className: "del btn-bad no-print", type:"button", textContent: "×", title:"Remover" });
+      del.addEventListener("click", ()=>{
+        const state = getStateFromForm();
+        const arr = state[containerId] || [];
+        arr.splice(idx, 1);
+        state[containerId] = arr;
+        setFormFromState(state);
+        markDirtyAndAutosave();
+      });
+
+      row.appendChild(input);
+      row.appendChild(del);
+      return { row, input };
+    }
+
+    function renderRows(containerId, values, placeholderBase){
+      const box = document.getElementById(containerId);
+      box.innerHTML = "";
+      const inputs = [];
+      (values || []).forEach((val, idx)=>{
+        const { row, input } = makeRow(containerId, idx, val, `${placeholderBase} ${idx+1}`);
+        box.appendChild(row);
+        inputs.push(input);
+      });
+      return inputs;
+    }
+
+    // Fixed two-field sections
+    function renderFixedTwo(containerId, aLabel, aKey, aVal, bLabel, bKey, bVal){
+      const box = document.getElementById(containerId);
+      box.innerHTML = "";
+
+      const rowA = el("div", { className:"row" });
+      const inputA = el("input", { type:"text", value: aVal || "", placeholder: aLabel });
+      inputA.addEventListener("input", markDirtyAndAutosave);
+      rowA.appendChild(inputA);
+
+      const rowB = el("div", { className:"row" });
+      const inputB = el("input", { type:"text", value: bVal || "", placeholder: bLabel });
+      inputB.addEventListener("input", markDirtyAndAutosave);
+      rowB.appendChild(inputB);
+
+      box.appendChild(rowA);
+      box.appendChild(rowB);
+
+      // attach to box dataset for extraction
+      box.dataset.keyA = aKey;
+      box.dataset.keyB = bKey;
+
+      return { inputA, inputB };
+    }
+
+    // ---- Form state
+    const dateInput = $("#date");
+    const weekdayInput = $("#weekday");
+    const statusPill = $("#status");
+    const lastSavedEl = $("#lastSaved");
+    const daysCountEl = $("#daysCount");
+    const historyList = $("#historyList");
+    const searchInput = $("#search");
+
+    let currentDateISO = "";
+    let dirty = false;
+    let autosaveTimer = null;
+
+    function setStatus(text, kind){
+      statusPill.textContent = text;
+      statusPill.style.borderColor =
+        kind === "ok" ? "rgba(46,229,157,0.55)" :
+        kind === "warn" ? "rgba(255,209,102,0.55)" :
+        "rgba(234,240,255,0.14)";
+      statusPill.style.background =
+        kind === "ok" ? "rgba(46,229,157,0.12)" :
+        kind === "warn" ? "rgba(255,209,102,0.12)" :
+        "rgba(0,0,0,0.20)";
+    }
+
+    function countNonEmpty(arr){
+      return (arr||[]).filter(v => String(v||"").trim().length>0).length;
+    }
+
+    function computeCounts(state){
+      const prio = countNonEmpty(state.prioritiesYes) + countNonEmpty(state.prioritiesNo);
+      const impact = countNonEmpty(state.good) + countNonEmpty(state.bad);
+      const focus = [state.focusEssential, state.focusLater].filter(v=>String(v||"").trim().length>0).length;
+      const close = [state.closingGood, state.closingImprove].filter(v=>String(v||"").trim().length>0).length;
+      $("#prioCount").textContent = `${prio} itens`;
+      $("#impactCount").textContent = `${impact} itens`;
+      $("#focusCount").textContent = `${focus}/2`;
+      $("#closeCount").textContent = `${close}/2`;
+    }
+
+    function getStateFromForm(){
+      const state = {
+        date: currentDateISO,
+        weekday: weekdayInput.value || "",
+        prioritiesYes: readRows("prioritiesYes"),
+        prioritiesNo: readRows("prioritiesNo"),
+        good: readRows("good"),
+        bad: readRows("bad"),
+        focusEssential: readFixed("focus", "keyA"),
+        focusLater: readFixed("focus", "keyB"),
+        closingGood: readFixed("closing", "keyA"),
+        closingImprove: readFixed("closing", "keyB"),
+        updatedAt: null
+      };
+      return state;
+    }
+
+    function readRows(containerId){
+      const box = document.getElementById(containerId);
+      const inputs = Array.from(box.querySelectorAll("input[type='text']"));
+      return inputs.map(i=>i.value);
+    }
+
+    function readFixed(containerId, whichKey){
+      const box = document.getElementById(containerId);
+      const keys = {
+        keyA: box.dataset.keyA,
+        keyB: box.dataset.keyB
+      };
+      const inputs = Array.from(box.querySelectorAll("input[type='text']"));
+      if(whichKey === "keyA") return inputs[0]?.value || "";
+      return inputs[1]?.value || "";
+    }
+
+    function setFormFromState(state){
+      weekdayInput.value = state.weekday || "";
+
+      renderRows("prioritiesYes", state.prioritiesYes || ["","","",""], "Prioridade");
+      renderRows("prioritiesNo",  state.prioritiesNo  || ["","",""], "Não prioridade");
+
+      renderRows("good", state.good || ["","",""], "Faz bem");
+      renderRows("bad",  state.bad  || ["","",""], "Não faz bem");
+
+      renderFixedTwo("focus",
+        "Uma coisa essencial que preciso fazer hoje", "focusEssential", state.focusEssential || "",
+        "Uma coisa que posso deixar para depois", "focusLater", state.focusLater || ""
+      );
+
+      renderFixedTwo("closing",
+        "O que fiz bem hoje", "closingGood", state.closingGood || "",
+        "O que posso melhorar amanhã", "closingImprove", state.closingImprove || ""
+      );
+
+      computeCounts(state);
+      dirty = false;
+      setStatus("Carregado", "ok");
+    }
+
+    function ensureDay(dateISO){
+      const all = loadAll();
+      if(!all[dateISO]){
+        const d = new Date(dateISO + "T12:00:00");
+        all[dateISO] = blankDay(dateISO, weekdayPT(d));
+        saveAll(all);
+      }
+      return all[dateISO];
+    }
+
+    function loadDay(dateISO){
+      currentDateISO = dateISO;
+      const d = new Date(dateISO + "T12:00:00");
+      dateInput.value = dateISO;
+
+      const all = loadAll();
+      const state = all[dateISO] || blankDay(dateISO, weekdayPT(d));
+
+      // if weekday is empty, fill with computed
+      if(!state.weekday) state.weekday = weekdayPT(d);
+
+      setFormFromState(state);
+
+      // update meta
+      lastSavedEl.textContent = state.updatedAt ? state.updatedAt : "—";
+      refreshHistory();
+      setStatus("Carregado", "ok");
+    }
+
+    function saveCurrent(silent=false){
+      const all = loadAll();
+      const state = getStateFromForm();
+      state.updatedAt = nowTime();
+      all[currentDateISO] = state;
+      saveAll(all);
+
+      dirty = false;
+      lastSavedEl.textContent = state.updatedAt;
+      computeCounts(state);
+      refreshHistory();
+      setStatus("Salvo", "ok");
+      if(!silent) toast("Salvo.");
+    }
+
+    function markDirtyAndAutosave(){
+      dirty = true;
+      setStatus("Editando…", "warn");
+
+      // debounce autosave
+      if(autosaveTimer) clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(()=>saveCurrent(true), 900);
+
+      // live counts
+      computeCounts(getStateFromForm());
+    }
+
+    // ---- Add item
+    document.addEventListener("click", (e)=>{
+      const btn = e.target.closest("button[data-add]");
+      if(!btn) return;
+      const id = btn.getAttribute("data-add");
+      const state = getStateFromForm();
+      state[id] = state[id] || [];
+      state[id].push("");
+      setFormFromState(state);
+      markDirtyAndAutosave();
+      // focus last input
+      const box = document.getElementById(id);
+      const inputs = box.querySelectorAll("input[type='text']");
+      inputs[inputs.length-1]?.focus();
+    });
+
+    // ---- Date change
+    dateInput.addEventListener("change", ()=>{
+      const newISO = dateInput.value;
+      if(!newISO) return;
+
+      if(dirty){
+        // Save before switching
+        saveCurrent(true);
+      }
+      loadDay(newISO);
+    });
+
+    // ---- Weekday manual edit allowed
+    weekdayInput.addEventListener("input", markDirtyAndAutosave);
+
+    // ---- Buttons
+    $("#btnSave").addEventListener("click", ()=>saveCurrent(false));
+    $("#btnPrint").addEventListener("click", ()=>window.print());
+
+    $("#btnClearDay").addEventListener("click", ()=>{
+      const ok = confirm("Tem certeza que deseja limpar os campos deste dia? (O dia continuará no histórico.)");
+      if(!ok) return;
+      const d = new Date(currentDateISO + "T12:00:00");
+      const cleared = blankDay(currentDateISO, weekdayPT(d));
+      setFormFromState(cleared);
+      markDirtyAndAutosave();
+      saveCurrent(true);
+      toast("Dia limpo.");
+    });
+
+    $("#btnDuplicate").addEventListener("click", ()=>{
+      const today = currentDateISO;
+      const d = new Date(today + "T12:00:00");
+      d.setDate(d.getDate()+1);
+      const tomorrowISO = toISODate(d);
+
+      const all = loadAll();
+      const current = getStateFromForm();
+
+      // copy and reset closing (optional)
+      const copy = JSON.parse(JSON.stringify(current));
+      copy.date = tomorrowISO;
+      copy.weekday = weekdayPT(d);
+      copy.updatedAt = nowTime();
+
+      all[tomorrowISO] = copy;
+      saveAll(all);
+
+      toast("Duplicado para amanhã.");
+      loadDay(tomorrowISO);
+    });
+
+    // Export/Import
+    $("#btnExport").addEventListener("click", ()=>{
+      const all = loadAll();
+      const blob = new Blob([JSON.stringify(all, null, 2)], {type:"application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `molde-diario-backup-${toISODate(new Date())}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    $("#btnImport").addEventListener("click", ()=>$("#fileImport").click());
+
+    $("#fileImport").addEventListener("change", async (e)=>{
+      const file = e.target.files && e.target.files[0];
+      if(!file) return;
+
+      try{
+        const text = await file.text();
+        const data = safeParse(text, null);
+        if(!data || typeof data !== "object") throw new Error("Arquivo inválido.");
+
+        const ok = confirm("Importar substituirá/mesclará seus dias atuais. Deseja continuar?");
+        if(!ok) return;
+
+        // merge (import overwrites same dates)
+        const all = loadAll();
+        const merged = { ...all, ...data };
+        saveAll(merged);
+
+        toast("Importado.");
+        refreshHistory();
+        // ensure current still exists
+        loadDay(currentDateISO);
+      }catch(err){
+        alert("Falha ao importar: " + (err.message || err));
+      }finally{
+        e.target.value = "";
+      }
+    });
+
+    // ---- History
+    function makeSummary(state){
+      const pr = countNonEmpty(state.prioritiesYes) + countNonEmpty(state.prioritiesNo);
+      const im = countNonEmpty(state.good) + countNonEmpty(state.bad);
+      const fo = [state.focusEssential, state.focusLater].filter(v=>String(v||"").trim().length>0).length;
+      return `P:${pr} • I:${im} • F:${fo}/2`;
+    }
+
+    function refreshHistory(){
+      const all = loadAll();
+      const entries = Object.keys(all).sort((a,b)=>b.localeCompare(a)); // desc
+
+      const q = (searchInput.value || "").trim().toLowerCase();
+      const filtered = entries.filter(dateISO=>{
+        if(!q) return true;
+        const st = all[dateISO] || {};
+        const blob = [
+          dateISO, st.weekday, ...(st.prioritiesYes||[]), ...(st.prioritiesNo||[]),
+          ...(st.good||[]), ...(st.bad||[]), st.focusEssential, st.focusLater, st.closingGood, st.closingImprove
+        ].join(" ").toLowerCase();
+        return blob.includes(q);
+      });
+
+      historyList.innerHTML = "";
+      filtered.forEach(dateISO=>{
+        const st = all[dateISO];
+        const item = el("div", { className: "dayitem" });
+
+        const left = el("div", { className: "left" });
+        const d = el("div", { className: "d", textContent: dateISO });
+        const s = el("div", { className: "s", textContent: `${st.weekday || ""} • ${makeSummary(st)}${st.updatedAt ? " • " + st.updatedAt : ""}` });
+        left.appendChild(d);
+        left.appendChild(s);
+
+        const badge = el("div", { className: "badge", textContent: dateISO === currentDateISO ? "ABERTO" : "ABRIR" });
+
+        item.appendChild(left);
+        item.appendChild(badge);
+
+        item.addEventListener("click", ()=>{
+          if(dirty) saveCurrent(true);
+          loadDay(dateISO);
+        });
+
+        historyList.appendChild(item);
+      });
+
+      daysCountEl.textContent = String(entries.length);
+    }
+
+    searchInput.addEventListener("input", refreshHistory);
+
+    // ---- Init defaults
+    function init(){
+      const today = toISODate(new Date());
+      ensureDay(today);
+      loadDay(today);
+
+      // also auto-fill weekday if empty on start
+      const d = new Date(today + "T12:00:00");
+      if(!weekdayInput.value) weekdayInput.value = weekdayPT(d);
+
+      refreshHistory();
+      setStatus("Carregado", "ok");
+      toast("Pronto.");
+    }
+
+    init();
+  })();
+</script>
+</body>
+</html>
